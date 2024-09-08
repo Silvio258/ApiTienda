@@ -17,13 +17,18 @@ class ProductController extends Controller
         return response()->json(['status' => 'success', 'data' => $products]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //
+        try {
+            $products = Product::create($request->all());
+            return response()->json(['status' => 'success', 'message' => 'Producto creado correctamente', 'data' => $products]);
+           
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -31,7 +36,25 @@ class ProductController extends Controller
     public function show(string $id)
     {
         //
+        try{
+
+
+            $products = Product::find($id);
+            if($products){
+                return response()->json(['status' => 'success', 'data' => $products]);
+            }
+            else{
+                return response()->json(['status' => 'error', 'message' => 'Producto no encontrado']);
+            }
+        }
+       
+        catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+
+
     }
+
 
     /**
      * Update the specified resource in storage.
